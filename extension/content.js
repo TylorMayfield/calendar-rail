@@ -13,12 +13,6 @@
   const owned = n => n?.nodeType === 1 && n.getAttribute('data-calendar-rail') === OWNER;
   const visible = n => n?.isConnected && n.getClientRects().length > 0 && getComputedStyle(n).visibility !== 'hidden';
 
-  function identity() {
-    // ONLY the active account control, never the account menu, title, inbox or message DOM.
-    const controls = [...document.querySelectorAll('header a[href^="https://accounts.google.com/SignOutOptions"], [role="banner"] a[href^="https://accounts.google.com/SignOutOptions"], .gb a[href^="https://accounts.google.com/SignOutOptions"]')].filter(visible);
-    return CalendarRailRouting.accountFromLabels(controls.map(n => n.getAttribute('aria-label') || ''));
-  }
-  function destination() { return CalendarRailRouting.destination(identity()); }
   function findMount() {
     // Current integrated Gmail app rail. Require multiple known, direct sibling controls.
     // Labels can be localized: product label variants live here, never search message text.
@@ -66,18 +60,16 @@
     host.style.cssText = 'display:block;flex:0 0 auto;box-sizing:border-box;';
     const shadow = host.attachShadow({mode:'closed'});
     const style = document.createElement('style');
-    style.textContent = `:host{color:inherit}*{box-sizing:border-box}a{display:flex;align-items:center;justify-content:center;gap:4px;min-height:48px;padding:8px 4px;margin:4px auto;color:inherit;font:inherit;text-decoration:none;border-radius:24px;cursor:pointer;line-height:16px;-webkit-tap-highlight-color:transparent}a:hover{background:color-mix(in srgb,currentColor 10%,transparent)}a:focus-visible{outline:2px solid currentColor;outline-offset:-3px}svg{flex:none}span{font-size:11px;white-space:nowrap}:host([data-mode=rail]) a{flex-direction:column;height:64px;min-height:64px;max-width:72px;margin:0 auto;padding:8px 0;gap:2px}:host([data-mode=rail]) svg{width:20px;height:20px}:host([data-mode=rail]) span{font-size:12px}:host([data-mode=mail]) a{justify-content:flex-start;padding-inline:26px;gap:18px;margin-inline:0;min-height:40px}:host([data-mode=mail]) span{font-size:14px}:host([data-collapsed]) a{justify-content:center;padding-inline:4px}:host([data-collapsed]) span{display:none}@media(forced-colors:active){a{color:LinkText}a:focus-visible{outline-color:Highlight}}`;
-    link = document.createElement('a');
+    style.textContent = `:host{color:inherit}*{box-sizing:border-box}button{border:0;background:transparent;width:100%;display:flex;align-items:center;justify-content:center;gap:4px;min-height:48px;padding:8px 4px;margin:4px auto;color:inherit;font:inherit;text-decoration:none;border-radius:24px;cursor:pointer;line-height:16px;-webkit-tap-highlight-color:transparent}button:hover{background:color-mix(in srgb,currentColor 10%,transparent)}button:focus-visible{outline:2px solid currentColor;outline-offset:-3px}button[aria-pressed=true]{background:color-mix(in srgb,currentColor 15%,transparent)}[role=status]{position:fixed;left:76px;bottom:24px;width:280px;max-width:calc(100vw - 90px);padding:14px;border:1px solid currentColor;border-radius:8px;background:Canvas;color:CanvasText;z-index:30;font:14px/1.4 system-ui}svg{flex:none}span{font-size:11px;white-space:nowrap}:host([data-mode=rail]) button{flex-direction:column;height:64px;min-height:64px;max-width:72px;margin:0 auto;padding:8px 0;gap:2px}:host([data-mode=rail]) svg{width:20px;height:20px}:host([data-mode=rail]) span{font-size:12px}:host([data-mode=mail]) button{justify-content:flex-start;padding-inline:26px;gap:18px;margin-inline:0;min-height:40px}:host([data-mode=mail]) span{font-size:14px}:host([data-collapsed]) button{justify-content:center;padding-inline:4px}:host([data-collapsed]) span{display:none}@media(forced-colors:active){button{color:LinkText}button:focus-visible{outline-color:Highlight}}`;
+    link = document.createElement('button'); link.type='button';
     link.innerHTML = icon + '<span>Calendar</span>';
-    link.target = '_blank'; link.rel = 'noopener noreferrer'; link.referrerPolicy = 'no-referrer';
-    link.setAttribute('aria-label','Open Calendar in a new tab');
-    link.title = 'Calendar — opens in a new tab · Calendar Rail';
-    link.href = destination();
-    const updateDestination = () => { if(link) link.href = destination(); };
-    link.addEventListener('pointerdown',updateDestination);
-    link.addEventListener('focus',updateDestination);
-    link.addEventListener('click',updateDestination);
-    link.addEventListener('auxclick',updateDestination);
+    link.setAttribute('aria-label','Open Calendar in Gmail');
+    link.setAttribute('aria-pressed','false');
+    link.title='Calendar in Gmail';
+    link.addEventListener('click',()=>CalendarRailWorkspace.open());
+    const status=document.createElement('div');status.setAttribute('role','status');status.hidden=true;
+    CalendarRailWorkspace.setOnState((active,message)=>{if(link)link.setAttribute('aria-pressed',String(active));status.textContent=message||'';status.hidden=!message;});
+    shadow.append(status);
     shadow.append(style,link);
     host.dataset.mode = m.mode;
     m.anchor.insertAdjacentElement('afterend',host);
@@ -99,7 +91,8 @@
     if (suspended) return;
     clearTimeout(timer); timer = null;
     try {
-      const m = findMount();
+      CalendarRailWorkspace.refresh();
+      const m = CalendarRailWorkspace.available() ? findMount() : null;
       if (!m) { unmount(); return; }
       if (!host?.isConnected || observedParent !== m.parent || host.dataset.mode !== m.mode) mount(m);
       else {
@@ -111,7 +104,7 @@
   }
   function schedule() { if (!timer && !suspended) timer = setTimeout(refresh,200); }
   // Observe structural changes without reading mutation records or any message content.
-  // Throttle scans; identity is read only at mount and explicit user interactions.
+  // Throttle navigation scans; no account identity or content is read.
   const observer = new MutationObserver(schedule);
   function start() { observer.observe(document.body,{childList:true,subtree:true}); schedule(); }
   globalThis[key] = {refresh};

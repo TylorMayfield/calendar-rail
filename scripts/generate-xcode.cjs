@@ -10,7 +10,7 @@ const extsrc=ref('extsrc','Extension/SafariWebExtensionHandler.swift','sourcecod
 const assets=ref('assets','App/Assets.xcassets','folder.assetcatalog');
 const apriv=ref('apriv','App/PrivacyInfo.xcprivacy','text.xml');
 const epriv=ref('epriv','Extension/PrivacyInfo.xcprivacy','text.xml');
-const files=['manifest.json','routing.js','content.js','about.html','about.css','icons'].map(f=>ref('extfile'+f,'../extension/'+f,f==='icons'?'folder':f.endsWith('.js')?'sourcecode.javascript':f.endsWith('.json')?'text.json':f.endsWith('.css')?'text.css':'text.html'));
+const files=['manifest.json','workspace.js','content.js','about.html','about.css','icons'].map(f=>ref('extfile'+f,'../extension/'+f,f==='icons'?'folder':f.endsWith('.js')?'sourcecode.javascript':f.endsWith('.json')?'text.json':f.endsWith('.css')?'text.css':'text.html'));
 const appprod=add('appprod',{isa:'PBXFileReference',explicitFileType:'wrapper.application',includeInIndex:0,path:'Calendar Rail.app',sourceTree:'BUILT_PRODUCTS_DIR'});
 const extprod=add('extprod',{isa:'PBXFileReference',explicitFileType:'wrapper.app-extension',includeInIndex:0,path:'Calendar Rail Extension.appex',sourceTree:'BUILT_PRODUCTS_DIR'});
 const group=add('group',{isa:'PBXGroup',children:[appsrc,extsrc,assets,apriv,epriv,...files,id('products')],sourceTree:'<group>'});
@@ -23,7 +23,7 @@ const embed=phase('embed','PBXCopyFilesBuildPhase',[extprod],{dstPath:'',dstSubf
 const proxy=add('proxy',{isa:'PBXContainerItemProxy',containerPortal:id('project'),proxyType:1,remoteGlobalIDString:id('exttarget'),remoteInfo:'Calendar Rail Extension'});
 const dep=add('dep',{isa:'PBXTargetDependency',target:id('exttarget'),targetProxy:proxy});
 function configs(prefix,settings){const ids=['Debug','Release'].map(name=>add(prefix+name,{isa:'XCBuildConfiguration',name,buildSettings:{...settings,...(name==='Debug'?{SWIFT_OPTIMIZATION_LEVEL:'-Onone'}:{SWIFT_COMPILATION_MODE:'wholemodule'})}}));return add(prefix+'configs',{isa:'XCConfigurationList',buildConfigurations:ids,defaultConfigurationIsVisible:0,defaultConfigurationName:'Release'})}
-const base={SDKROOT:'macosx',MACOSX_DEPLOYMENT_TARGET:'13.0',SWIFT_VERSION:'5.0',CLANG_ENABLE_MODULES:'YES',CLANG_ENABLE_OBJC_ARC:'YES',CODE_SIGN_STYLE:'Automatic',ENABLE_HARDENED_RUNTIME:'YES',CURRENT_PROJECT_VERSION:'2',MARKETING_VERSION:'1.0.1'};
+const base={SDKROOT:'macosx',MACOSX_DEPLOYMENT_TARGET:'13.0',SWIFT_VERSION:'5.0',CLANG_ENABLE_MODULES:'YES',CLANG_ENABLE_OBJC_ARC:'YES',CODE_SIGN_STYLE:'Automatic',ENABLE_HARDENED_RUNTIME:'YES',CURRENT_PROJECT_VERSION:'3',MARKETING_VERSION:'1.1.0'};
 const pc=configs('project',base);
 const ac=configs('app',{INFOPLIST_FILE:'App/Info.plist',PRODUCT_BUNDLE_IDENTIFIER:'com.tylormayfield.calendarrail',PRODUCT_NAME:'Calendar Rail',CODE_SIGN_ENTITLEMENTS:'App/CalendarRail.entitlements',ASSETCATALOG_COMPILER_APPICON_NAME:'AppIcon',LD_RUNPATH_SEARCH_PATHS:['$(inherited)','@executable_path/../Frameworks'],GENERATE_INFOPLIST_FILE:'NO'});
 const ec=configs('ext',{INFOPLIST_FILE:'Extension/Info.plist',PRODUCT_BUNDLE_IDENTIFIER:'com.tylormayfield.calendarrail.Extension',PRODUCT_NAME:'Calendar Rail Extension',PRODUCT_MODULE_NAME:'Calendar_Rail_Extension',CODE_SIGN_ENTITLEMENTS:'Extension/CalendarRail.entitlements',SKIP_INSTALL:'YES',APPLICATION_EXTENSION_API_ONLY:'YES',GENERATE_INFOPLIST_FILE:'NO',LD_RUNPATH_SEARCH_PATHS:['$(inherited)','@executable_path/../Frameworks','@executable_path/../../../../Frameworks']});

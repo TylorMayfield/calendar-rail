@@ -4,5 +4,5 @@ const root=path.resolve(__dirname,'..'); const version=JSON.parse(fs.readFileSyn
 fs.mkdirSync(path.join(root,'dist'),{recursive:true});
 const target=path.join(root,'dist',`calendar-rail-${version}.zip`);
 fs.rmSync(target,{force:true});
-cp.execFileSync('/usr/bin/zip',['-qr',target,'manifest.json','content.js','routing.js','about.html','about.css','icons'],{cwd:path.join(root,'extension')});
+cp.execFileSync('/usr/bin/zip',['-qr',target,'manifest.json',...JSON.parse(fs.readFileSync(path.join(root,'extension/manifest.json'))).content_scripts[0].js,'about.html','about.css','icons'],{cwd:path.join(root,'extension')});
 console.log(target);

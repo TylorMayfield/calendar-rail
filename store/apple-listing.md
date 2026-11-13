@@ -1,43 +1,39 @@
-# Mac App Store copy
+# Mac App Store copy — workspace development version
 
 Name: Calendar Rail
-Subtitle: Calendar shortcut for Gmail
+Short description / subtitle: Calendar shortcut for Gmail
 Category: Productivity
 Price: Free
 Language: English (U.S.)
-SKU: calendar-rail-macos
-Bundle identifier: com.tylormayfield.calendarrail
-Extension identifier: com.tylormayfield.calendarrail.Extension
-App Store Connect app ID: 6834452908
 
 ## Description
 
-Add a Calendar shortcut below Mail, Chat and Meet in Gmail's left navigation. Select Calendar to open Google Calendar in a new tab.
+Add a Calendar button below Mail, Chat and Meet in Gmail’s left navigation. Select it to expand Gmail’s built-in Calendar companion across the center workspace, without opening a new tab. Select Mail, Chat or Meet to return.
 
-Calendar Rail uses the active account address shown in Gmail's account button instead of copying an account number. If it cannot identify the account, Google's account chooser opens. Google may ask you to sign in or your organization may restrict Calendar.
+This uses the Calendar companion’s available views and features, rather than the full standalone Calendar website. Gmail handles sign-in and account selection. Gmail’s right side panel must be shown, and your organization may restrict Calendar.
 
-The simple outline icon follows the page's text color. Narrow navigation keeps an accessible icon. If Gmail's layout is not recognized, the shortcut stays hidden. When Chat and Meet are disabled, it appears below Compose.
+The original outline icon follows Gmail’s text color and supports narrow navigation. Unknown layouts hide the button or show an opening error. Refresh Gmail after installation or updates.
 
-Enable Calendar Rail in Safari Settings → Extensions, allow access to mail.google.com, then refresh Gmail. Refresh open Gmail tabs after updates.
+Free. No ads, subscriptions, analytics, backend, account connection or persistent storage. No reading of messages, attachments, contacts, account addresses or calendar event contents. No network API calls or developer servers.
 
-Safari asks to read and change data on mail.google.com so the extension can add the link and identify the active account from its account button. It does not read messages, attachments, contacts or calendar events. It has no ads, subscriptions, analytics, backend, account connection or persistent storage. When you select Calendar, the normal navigation URL sends the active account address directly to Google for account selection. No email or calendar content is transmitted.
+Your browser asks to read and change data on mail.google.com. That access is necessary to add the button, activate Gmail’s existing Calendar control and resize its panel. No Calendar host access or extra extension API permissions are requested.
 
 This extension is an independent product and is not affiliated with, endorsed by, or sponsored by Google or any Google product.
 
-## Metadata
+## Links
 
-Keywords: calendar,shortcut,mail,navigation,safari,productivity
-Support URL: https://github.com/TylorMayfield/calendar-rail/issues
-Marketing URL: https://github.com/TylorMayfield/calendar-rail
-Privacy policy URL: https://github.com/TylorMayfield/calendar-rail/blob/main/PRIVACY.md
-Copyright: 2026 Tylor Mayfield
+Source: https://github.com/TylorMayfield/calendar-rail
+Support: https://github.com/TylorMayfield/calendar-rail/issues
+Privacy: https://github.com/TylorMayfield/calendar-rail/blob/main/PRIVACY.md
 
-## Privacy and review preparation
+## Privacy fields
 
-Data collected by the developer: None. No tracking. The active address is used transiently for the user's navigation to Google's service. No developer servers, telemetry, analytics, storage or tracking SDKs. Review the exact App Store Connect definitions before saving the privacy questionnaire.
+Single purpose: Expand Gmail’s own Calendar companion into its center workspace from a left-navigation button.
+Page access justification: A declarative content script runs only on https://mail.google.com/mail/* to insert a button, activate the existing Calendar control and resize its panel. It inspects navigation/control state and frame geometry, not message or event content. No tabs, Calendar host, identity, cookies or storage permission.
+Developer collection: None. No tracking, remote code, analytics, diagnostic collection or developer network requests. Google’s native companion loads its own content under Google’s policies.
 
-No advertising, user-generated content service, payments, messaging service, health content, unrestricted web browsing, or in-app purchases are implemented by the app. The extension opens one Calendar destination; Gmail and Calendar content remain in Safari under Google's service.
+## Reviewer instructions
 
-Review notes: macOS Safari extension. The containing app explains activation and provides a button to Safari extension settings. Enable on mail.google.com and refresh Gmail. Calendar appears below Meet in the app rail, or below Compose in mail-only mode. Requires a signed-in Gmail account supplied by the reviewer; the app has no account or sign-in of its own. Test with each of two Google accounts and verify account identity in the opened Calendar tab. Never supply personal mail or calendar screenshots.
+Enable the extension for mail.google.com and refresh signed-in Gmail. Show Gmail’s right side panel. Select Calendar below Meet (or below Compose in recognized mail-only layouts). Calendar’s companion should fill the center workspace. Select Mail/Chat/Meet or the native Calendar Close control to restore the underlying app. Verify with each of two signed-in Google accounts and changed account order; no account number is mapped by the extension.
 
-Do not state that real Safari acceptance, multi-account account-order tests, signing, upload or store review is complete unless docs/verification.md records the corresponding evidence.
+No private test account is supplied. Never upload real message/event content in screenshots. Outstanding installed Safari, live multi-account, fresh-install and update checks are listed in docs/verification.md. Do not submit until those checks and signing/access are resolved. Existing App Store Connect draft metadata and old screenshots still need replacement before submission.

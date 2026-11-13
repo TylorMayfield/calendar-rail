@@ -1,40 +1,22 @@
 # Calendar Rail
 
-A free, private Calendar shortcut for Gmail's left app rail, below Mail, Chat and Meet. Opens Google Calendar in a new tab. Shared vanilla JavaScript and Manifest V3 for Chrome and macOS Safari.
+A free Calendar button below Mail, Chat and Meet in Gmail. Opens Gmail’s own Calendar companion across the center workspace, keeping the same Gmail tab and Google session. Original monochrome icon; shared vanilla JavaScript and Manifest V3 for Chrome and macOS Safari.
 
-**Release status:** development build. Neither store listing is live. Submission is paused following a request for Calendar in Gmail’s center pane; that experimental behavior is not included. See [verification](docs/verification.md) and [submission status](docs/submission-status.md) for evidence and remaining checks.
+**Development version 1.1.0:** the workspace behavior has been visually verified in real Chrome. Installed Safari, two signed-in accounts, store updates and submissions remain unverified. Neither store listing is live. See [verification](docs/verification.md) and [submission status](docs/submission-status.md).
 
 ## Privacy and permissions
 
-The only website scope is `https://mail.google.com/mail/*`. No extension API permissions, background worker, backend, cookies, account connection, analytics, ads, subscriptions or persistent storage.
+The only website scope is `https://mail.google.com/mail/*`. Browsers may describe this as permission to read and change data on mail.google.com. Page modification is needed to add the button, activate Gmail’s existing Calendar control and resize its frame. The extension does not read account identities, messages, attachments, contacts, event contents or the Calendar frame document. Gmail handles Calendar authentication and account selection.
 
-Your browser can describe the permission as reading and changing data on mail.google.com. It is necessary to insert the shortcut and read the active account email address from the account button. Calendar Rail does not read messages, attachments, contacts or calendar events. An email address is held only while constructing a normal Calendar navigation URL; it is sent to Google only when you open the link. No account numbers are saved or copied between services. If the active identity is ambiguous, Google's account chooser opens.
+No extension API permissions, Calendar host access, background worker, backend, account connection, analytics, ads, subscriptions, network API calls or persistent storage. [Privacy policy](PRIVACY.md).
 
-[Full privacy policy](PRIVACY.md) · [Support](https://github.com/TylorMayfield/calendar-rail/issues)
+## Development installation
 
-## Install a development build
+Chrome: load `extension/` at `chrome://extensions` using **Load unpacked**, then refresh Gmail. Show Gmail’s right side panel, and select **Calendar** below Meet. Select Calendar again, its native Close control, or Mail/Chat/Meet to return. With Chat and Meet disabled, the button appears below Compose when that layout is recognized.
 
-### Chrome
+Safari on macOS: open `safari/Calendar Rail.xcodeproj`, configure the existing developer team for both targets, build/run, then enable Calendar Rail in Safari **Settings → Extensions** and allow mail.google.com. A valid signed build is still needed for installed Safari acceptance. See [Safari instructions](docs/safari.md).
 
-1. Download this source or clone the repository.
-2. Visit `chrome://extensions`, enable Developer mode, choose **Load unpacked**, and select `extension/`.
-3. Refresh Gmail. Select **Calendar** below Meet in the left rail.
-4. If Chat and Meet are both disabled, a shortcut appears below Compose instead.
-
-### Safari on macOS
-
-Requires a Mac with Xcode and Safari. This project contains a macOS Safari web extension wrapper in `safari/`.
-
-1. Open `safari/Calendar Rail.xcodeproj` in Xcode.
-2. Select your Apple developer team for the app and extension targets. Bundle prefix is `com.tylormayfield.calendarrail`.
-3. Build and run the macOS app. Enable Calendar Rail in Safari **Settings → Extensions** and allow `mail.google.com`.
-4. Refresh Gmail. See [Safari build instructions](docs/safari.md).
-
-Do not enable unsigned extensions on your everyday browser without understanding the developer setting. A signed App Store build does not need that setting.
-
-## Development
-
-There are no runtime or development npm dependencies. Node 22+ is sufficient for:
+Node 22+; no npm dependencies:
 
 ```sh
 npm test
@@ -43,18 +25,18 @@ npm run package
 npm run test:browser
 ```
 
-`test:browser` builds a self-contained synthetic navigation fixture and behavioral regression harness at `build/browser-harness.html`. Open it in Chrome or Safari and select **Run checks**. It does not use a real Google account. Fixture builds relax the origin guard for the generated local file only; those files never enter the shipping ZIP. See [testing](docs/testing.md).
+The generated browser harness is a synthetic fixture, not real Google authentication. See [testing](docs/testing.md).
 
-## Compatibility and limits
+## Limits
 
-Gmail has no supported extension point for adding app-rail buttons. The adapter validates the location, dimensions and known sibling controls, adds one isolated element, and leaves Gmail controls untouched. A layout it cannot recognize produces no shortcut. No guarantee of compatibility with every Gmail experiment, language or another extension is made.
+This expands Gmail’s built-in Calendar companion. It does not embed the full standalone Calendar website or add its week/month interface. Its available views, colors and features are controlled by Google. Gmail’s right side panel must be available. Calendar can be restricted by an organization.
 
-Account routing uses an email-valued `authuser` query. Google's routing and organization policies can still require sign-in or account selection. Browser profiles and Safari private windows have separate sign-in sessions. Reordered account slots are covered by synthetic regression tests; real-account verification must be recorded separately.
+Gmail has no supported extension point for adding app-rail buttons or expanding its companion. The adapter requires known controls, a recognized center region and exactly one Calendar iframe in its panel. Unrecognized layouts hide the shortcut or display an opening error. No security headers are removed, and no frame is navigated or copied. Returning to another app removes owned styles and restores the underlying workspace’s focusability. Gmail experiments, locales and other extensions can affect compatibility.
 
-Refresh Gmail after installation and updates. Removing the extension stops future injection; refresh open Gmail tabs to remove an existing shortcut. Source is readable and unminified.
+Multiple live account selection and account reordering must still be tested; no numeric account mapping is assumed or implemented. Refresh Gmail after installation, updates or removal. Source is readable and unminified.
 
 ## Branding
 
-The monochrome Calendar Rail icon is original artwork created for this project. The in-page calendar symbol is an original generic outline in the page’s current text color. Google and Gmail names identify compatibility only.
+The extension icon and generic in-page calendar outline are original. Google and Gmail names explain compatibility only.
 
 This extension is an independent product and is not affiliated with, endorsed by, or sponsored by Google or any Google product.

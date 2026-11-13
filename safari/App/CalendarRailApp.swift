@@ -13,7 +13,7 @@ struct CalendarRailApp: App {
                         Text("Calendar shortcut for Gmail").foregroundStyle(.secondary)
                     }
                 }
-                Text("Enable Calendar Rail in Safari Settings, allow access to mail.google.com, then refresh Gmail. Select Calendar below Meet to open Google Calendar in a new tab.")
+                Text("Enable Calendar Rail in Safari Settings, allow access to mail.google.com, then refresh Gmail. Show Gmail’s right side panel, then select Calendar below Meet to expand the built-in Calendar companion across the center workspace.")
                 Button("Open Safari extension settings") {
                     SFSafariApplication.showPreferencesForExtension(withIdentifier: "com.tylormayfield.calendarrail.Extension") { error in
                         if error != nil {
@@ -28,8 +28,8 @@ struct CalendarRailApp: App {
                 }.buttonStyle(.borderedProminent)
                 Divider()
                 Text("Page permission").font(.headline)
-                Text("Safari asks to read and change data on mail.google.com. This lets the extension add the shortcut and read the active account address from the account button. It does not read messages, attachments, contacts or calendar events.")
-                Text("No ads, analytics, subscriptions, backend or data storage. The active address is used only to open the matching Google Calendar. If the account is unclear, Google’s account chooser opens.")
+                Text("Safari asks to read and change data on mail.google.com. This lets the extension add the button, activate Gmail’s native Calendar control and resize its panel. It does not read messages, attachments, contacts or calendar events.")
+                Text("No ads, analytics, subscriptions, backend or data storage. Gmail handles Calendar sign-in and account selection. This uses the companion’s views, not the full standalone Calendar website.")
                 HStack {
                     Link("Privacy policy", destination: URL(string: "https://github.com/TylorMayfield/calendar-rail/blob/main/PRIVACY.md")!)
                     Link("Source and support", destination: URL(string: "https://github.com/TylorMayfield/calendar-rail")!)

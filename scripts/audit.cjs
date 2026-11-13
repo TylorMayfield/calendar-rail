@@ -6,7 +6,7 @@ for(const k of ['permissions','host_permissions','optional_permissions','backgro
 assert.deepEqual(m.content_scripts[0].matches,['https://mail.google.com/mail/*']);
 assert.equal(m.content_scripts[0].all_frames,false);
 const source=m.content_scripts[0].js.map(f=>fs.readFileSync(path.join(ext,f),'utf8')).join('\n');
-for(const re of [/\bfetch\s*\(/,/XMLHttpRequest/,/sendBeacon/,/WebSocket/,/EventSource/,/\blocalStorage\b/,/\bsessionStorage\b/,/\bindexedDB\b/,/\bdocument\.cookie\b/,/\bchrome\./,/\bbrowser\./,/\beval\s*\(/,/new Function/,/document\.(title|documentElement\.innerHTML|body\.(innerHTML|innerText|textContent))/,/\.cloneNode\(/]) assert.ok(!re.test(source),`forbidden behavior: ${re}`);
+for(const re of [/\bfetch\s*\(/,/XMLHttpRequest/,/sendBeacon/,/WebSocket/,/EventSource/,/\blocalStorage\b/,/\bsessionStorage\b/,/\bindexedDB\b/,/\bdocument\.cookie\b/,/\bchrome\./,/\bbrowser\./,/\beval\s*\(/,/new Function/,/\.contentDocument\b/,/\.contentWindow\b/,/\.postMessage\s*\(/,/document\.(title|documentElement\.innerHTML|body\.(innerHTML|innerText|textContent))/,/\.cloneNode\(/]) assert.ok(!re.test(source),`forbidden behavior: ${re}`);
 for(const f of m.content_scripts[0].js) new (require('node:vm').Script)(fs.readFileSync(path.join(ext,f),'utf8'),{filename:f});
 for(const f of Object.values(m.icons)) assert.ok(fs.existsSync(path.join(ext,f)));
 const disclaimer='This extension is an independent product and is not affiliated with, endorsed by, or sponsored by Google or any Google product.';

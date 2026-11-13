@@ -1,47 +1,39 @@
-# Chrome Web Store copy
+# Chrome Web Store copy — workspace development version
 
-Title: Calendar Rail — shortcut for Gmail
-
-Short description: Add a private Calendar shortcut to Gmail’s left navigation. Free, with no ads or tracking.
-
+Name: Calendar Rail — shortcut for Gmail
+Short description / subtitle: Calendar shortcut for Gmail
 Category: Productivity
 Price: Free
-Language: English (United States)
+Language: English (U.S.)
 
 ## Description
 
-Open Google Calendar from Gmail's left app rail. Calendar Rail adds a simple calendar icon below Mail, Chat and Meet and opens Calendar in a new tab.
+Add a Calendar button below Mail, Chat and Meet in Gmail’s left navigation. Select it to expand Gmail’s built-in Calendar companion across the center workspace, without opening a new tab. Select Mail, Chat or Meet to return.
 
-The shortcut uses the active account address shown in Gmail's account button, rather than assuming Gmail and Calendar share the same account number. If it cannot identify the account, Google's account chooser opens.
+This uses the Calendar companion’s available views and features, rather than the full standalone Calendar website. Gmail handles sign-in and account selection. Gmail’s right side panel must be shown, and your organization may restrict Calendar.
 
-The icon follows the page's text color and fits narrow navigation. If Gmail's layout is not recognized, the shortcut stays hidden. When Chat and Meet are disabled, it appears below Compose instead. Refresh Gmail after installation or updates.
+The original outline icon follows Gmail’s text color and supports narrow navigation. Unknown layouts hide the button or show an opening error. Refresh Gmail after installation or updates.
 
-Free. No ads, subscriptions, analytics, backend, account connection or persistent storage. It does not read messages, attachments, contacts or calendar events.
+Free. No ads, subscriptions, analytics, backend, account connection or persistent storage. No reading of messages, attachments, contacts, account addresses or calendar event contents. No network API calls or developer servers.
 
-Your browser asks to read and change data on mail.google.com. This page access lets Calendar Rail insert the shortcut and identify the active account from its account button. When you select Calendar, your browser sends that account address directly to Google in the normal Calendar navigation URL. No email or calendar content is transmitted.
-
-Google can require sign-in or restrict Calendar through your organization. Gmail layout changes can temporarily hide the shortcut. This extension does not grant access to a Google account or Calendar data.
+Your browser asks to read and change data on mail.google.com. That access is necessary to add the button, activate Gmail’s existing Calendar control and resize its panel. No Calendar host access or extra extension API permissions are requested.
 
 This extension is an independent product and is not affiliated with, endorsed by, or sponsored by Google or any Google product.
 
 ## Links
 
-Homepage/source: https://github.com/TylorMayfield/calendar-rail
+Source: https://github.com/TylorMayfield/calendar-rail
 Support: https://github.com/TylorMayfield/calendar-rail/issues
 Privacy: https://github.com/TylorMayfield/calendar-rail/blob/main/PRIVACY.md
 
-## Privacy practices fields
+## Privacy fields
 
-Single purpose: Add a Calendar shortcut to Gmail's left navigation that opens Google Calendar for the active account in a new tab.
+Single purpose: Expand Gmail’s own Calendar companion into its center workspace from a left-navigation button.
+Page access justification: A declarative content script runs only on https://mail.google.com/mail/* to insert a button, activate the existing Calendar control and resize its panel. It inspects navigation/control state and frame geometry, not message or event content. No tabs, Calendar host, identity, cookies or storage permission.
+Developer collection: None. No tracking, remote code, analytics, diagnostic collection or developer network requests. Google’s native companion loads its own content under Google’s policies.
 
-Host access justification: The declarative content script runs only on https://mail.google.com/mail/* to add one link to the navigation. It reads the active account button's accessible label to construct an account-specific Calendar link. It does not read or transmit messages, attachments, contacts or events. A normal link opens the new tab, so no tabs permission is requested.
+## Reviewer instructions
 
-Remote code: No. All executable code is bundled, readable and unminified.
+Enable the extension for mail.google.com and refresh signed-in Gmail. Show Gmail’s right side panel. Select Calendar below Meet (or below Compose in recognized mail-only layouts). Calendar’s companion should fill the center workspace. Select Mail/Chat/Meet or the native Calendar Close control to restore the underlying app. Verify with each of two signed-in Google accounts and changed account order; no account number is mapped by the extension.
 
-Data disclosure: No developer collection or storage of user data. The active account address is handled transiently on the page and included in a navigation URL sent directly to Google only when the user opens Calendar. This use is disclosed in the popup, description and privacy policy. Review the exact wording of the dashboard's data-collection categories before certification; do not confuse local handling with developer collection.
-
-No sale or transfer to third parties by the developer. No advertising, creditworthiness or lending use. No browsing history collection. No diagnostics or analytics collection.
-
-## Reviewer steps
-
-Install, refresh a signed-in Gmail tab with Chat/Meet enabled, and choose Calendar below Meet. Verify the new tab's account matches Gmail's account button. With two signed-in accounts, repeat for each; do not rely on numeric slots. If the account button is missing/ambiguous the extension opens Google's account chooser. No special test login is required by the extension. See docs/verification.md for checks actually completed before submission.
+No private test account is supplied. Never upload real message/event content in screenshots. Outstanding installed Safari, live multi-account, fresh-install and update checks are listed in docs/verification.md. Do not submit until those checks and signing/access are resolved. Existing App Store Connect draft metadata and old screenshots still need replacement before submission.

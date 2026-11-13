@@ -16,3 +16,7 @@ One Manifest V3 content script pair, an inert help/privacy popup, no background 
 ## Release gate
 
 Do not submit an unverified layout or claim a successful submission without a store receipt. Do not use screenshots with personal mail or calendar information. Synthetic fixture captures are labeled and are not evidence of real Gmail acceptance. Do not claim listing availability while a package is merely local, uploaded, or in review.
+
+## Workspace implementation, November 13 update
+
+Version 1.1.0 supersedes the email-URL routing approach above. It activates Gmail’s native Calendar companion via its existing control and temporarily expands that panel over the recognized center view. It does not navigate/embed the standalone Calendar site, remove security headers, request Calendar origin access or read the frame document. Account selection remains owned by Gmail’s native session; live two-account acceptance is still pending. The companion does not provide full standalone Calendar view parity. Its undocumented DOM/layout dependencies are validated narrowly and may stop working after Gmail updates.

@@ -1,6 +1,6 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
-const {accountFromLabels:parse,destination}=require('../extension/routing.js');
+const {accountFromLabels:parse,destination}=require('../legacy/routing.js');
 test('active account is chosen by identity, never a numeric slot',()=>{
  for(const email of ['alice@example.test','bob@work.example','name+calendar@example.test']){
   assert.equal(parse([`Google Account: Person (${email})`]),email);
