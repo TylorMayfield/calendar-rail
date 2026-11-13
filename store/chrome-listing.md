@@ -1,4 +1,4 @@
-# Chrome Web Store copy — workspace development version
+# Chrome Web Store listing — 1.1.1 pending review
 
 Name: Calendar Rail — shortcut for Gmail
 Short description / subtitle: Calendar shortcut for Gmail
@@ -22,8 +22,9 @@ This extension is an independent product and is not affiliated with, endorsed by
 
 ## Links
 
+Homepage: https://www.tylor.nz/
 Source: https://github.com/TylorMayfield/calendar-rail
-Support: https://github.com/TylorMayfield/calendar-rail/issues
+Support: https://www.tylor.nz/support/
 Privacy: https://github.com/TylorMayfield/calendar-rail/blob/main/PRIVACY.md
 
 ## Privacy fields
@@ -36,4 +37,4 @@ Developer collection: None. No tracking, remote code, analytics, diagnostic coll
 
 Enable the extension for mail.google.com and refresh signed-in Gmail. Show Gmail’s right side panel. Select Calendar below Meet (or below Compose in recognized mail-only layouts). Calendar’s companion should fill the center workspace. Select Mail/Chat/Meet or the native Calendar Close control to restore the underlying app. Verify with each of two signed-in Google accounts and changed account order; no account number is mapped by the extension.
 
-No private test account is supplied. Never upload real message/event content in screenshots. Outstanding installed Safari, live multi-account, fresh-install and update checks are listed in docs/verification.md. Do not submit until those checks and signing/access are resolved. Existing App Store Connect draft metadata and old screenshots still need replacement before submission.
+No private test account is supplied. Never upload real message/event content in screenshots. Live multi-account and additional acceptance checks are listed in docs/verification.md and are not claimed complete. Chrome 1.1.1 is submitted and pending review; see docs/chrome-submission-receipt.json. Actual installed Safari acceptance and successful signing are still required before Mac submission.

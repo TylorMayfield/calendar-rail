@@ -22,8 +22,9 @@ This extension is an independent product and is not affiliated with, endorsed by
 
 ## Links
 
+Homepage: https://www.tylor.nz/
 Source: https://github.com/TylorMayfield/calendar-rail
-Support: https://github.com/TylorMayfield/calendar-rail/issues
+Support: https://www.tylor.nz/support/
 Privacy: https://github.com/TylorMayfield/calendar-rail/blob/main/PRIVACY.md
 
 ## Privacy fields

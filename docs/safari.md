@@ -24,3 +24,5 @@ For App Store distribution, select the existing developer team for BOTH targets 
 Alternatively, when available for the existing App Store Connect account, upload the shared extension ZIP through the Safari Web Extension Packager on the app's Xcode Cloud tab, then test the resulting build via TestFlight. Verify included compute capacity before packaging and do not buy additional compute.
 
 Unsigned build success only verifies compilation. It does not prove Safari runtime behavior, real-account routing, signing, App Store upload or acceptance.
+
+App Store Connect cloud packaging uses packages/calendar-rail-safari-1.1.1.zip. Its manifest display name is Calendar Rail, matching the app record; executable content scripts are identical to Chrome. The Safari archive adds the original 1024px icon. The Chrome archive retains its compatibility title. Run npm run package to regenerate both.

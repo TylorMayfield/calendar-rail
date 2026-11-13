@@ -1,6 +1,6 @@
 # Verification — November 13, 2026
 
-Version 1.1.0 is the center-workspace development implementation. Version 1.0.1 was the earlier new-tab implementation. No store submission or live listing is confirmed.
+Version 1.1.0 is the center-workspace development implementation. Version 1.0.1 was the earlier new-tab implementation. Chrome 1.1.1 has been submitted and is pending review; neither listing is confirmed live.
 
 | Check | Evidence and limit |
 | --- | --- |
@@ -15,7 +15,7 @@ Version 1.1.0 is the center-workspace development implementation. Version 1.0.1 
 | Updates/fresh install | Reloaded the existing unpacked ID from 1.0.1 to 1.1.0 and refreshed Gmail. One button, no duplicate. A clean install of 1.1.0 and signed store-update tests remain required. |
 | Safari | Earlier unsigned universal wrapper compiled and native app launched. Installed Safari extension did not appear with ad-hoc signing. 1.1.0 universal arm64/x86_64 Release build succeeded (`build-safari.log`); actual Safari extension, companion behavior, fresh install and update remain unverified until valid signing/access. |
 
-## Remaining release gates
+## Outstanding acceptance checks
 
 - Two simultaneously signed-in Google accounts, independently verified Calendar identity for each, then changed sign-in order. No numeric-slot assumption is acceptable.
 - Actual signed Safari extension: Mail/Chat switching, dark/light modes, narrow/collapsed navigation, zoom, fresh install and update.
@@ -31,3 +31,7 @@ This is Gmail’s Calendar companion expanded to the center, not the full standa
 Reproduced the defect in actual Gmail: scrolling the inbox moved its role=main rectangle to y=-1481. Previous code used that scrolled top as the fixed panel top. The corrected layout anchors to the visible Gmail banner, stable outer Mail workspace and current side-rail edge. Explicit bounded width/height replace frozen initial right/bottom offsets. Unknown header geometry clears owned styles and restores main focusability. No frame content reads or permissions were added.
 
 Live Chrome checks: at 100%, Calendar remained x324–1456/y64–715 despite Mail main y=-1481. At 125% it remained below y64 with width829.6/height504.8. At 150% (1008 CSS px viewport), width628/height407.3; collapsed navigation expanded it to width868 at x84 while keeping y64. Native Close restored Mail focusability. Zoom reset to 100%. Tests include the scrolled-content regression and dynamic geometry changes; the active Node suite has 10 passing tests. Browser fixture execution remains blocked/unverified, and signed Safari acceptance is still outstanding.
+
+## Store preparation update
+
+Chrome 1.1.1 was submitted at the user’s request with the documented acceptance limitations still open. Both Apple cloud packaging attempts returned Service Error. The second archive uses the exact app-record name Calendar Rail and a 1024px original icon; executable content matches Chrome byte-for-byte. No signed Safari runtime result is claimed. Current Chrome store graphics use genuine cropped navigation/workspace captures, with no private content.
