@@ -1,0 +1,38 @@
+// Deterministic macOS wrapper project. Run only after changing project file inputs.
+const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
+const root=path.resolve(__dirname,'../safari');const objects={};
+const id=x=>crypto.createHash('sha1').update(x).digest('hex').slice(0,24).toUpperCase();
+const add=(name,obj)=>{objects[id(name)]=obj;return id(name)};
+const q=x=>'"'+x.replace(/\\/g,'\\\\').replace(/"/g,'\\"')+'"';
+const ref=(name,file,type)=>add(name,{isa:'PBXFileReference',lastKnownFileType:type,path:file,sourceTree:'SOURCE_ROOT'});
+const appsrc=ref('appsrc','App/CalendarRailApp.swift','sourcecode.swift');
+const extsrc=ref('extsrc','Extension/SafariWebExtensionHandler.swift','sourcecode.swift');
+const assets=ref('assets','App/Assets.xcassets','folder.assetcatalog');
+const apriv=ref('apriv','App/PrivacyInfo.xcprivacy','text.xml');
+const epriv=ref('epriv','Extension/PrivacyInfo.xcprivacy','text.xml');
+const files=['manifest.json','routing.js','content.js','about.html','about.css','icons'].map(f=>ref('extfile'+f,'../extension/'+f,f==='icons'?'folder':f.endsWith('.js')?'sourcecode.javascript':f.endsWith('.json')?'text.json':f.endsWith('.css')?'text.css':'text.html'));
+const appprod=add('appprod',{isa:'PBXFileReference',explicitFileType:'wrapper.application',includeInIndex:0,path:'Calendar Rail.app',sourceTree:'BUILT_PRODUCTS_DIR'});
+const extprod=add('extprod',{isa:'PBXFileReference',explicitFileType:'wrapper.app-extension',includeInIndex:0,path:'Calendar Rail Extension.appex',sourceTree:'BUILT_PRODUCTS_DIR'});
+const group=add('group',{isa:'PBXGroup',children:[appsrc,extsrc,assets,apriv,epriv,...files,id('products')],sourceTree:'<group>'});
+add('products',{isa:'PBXGroup',children:[appprod,extprod],name:'Products',sourceTree:'<group>'});
+const phase=(name,isa,refs,extra={})=>add(name,{isa,buildActionMask:2147483647,files:refs.map((r,i)=>add(name+i,{isa:'PBXBuildFile',fileRef:r,...(isa==='PBXCopyFilesBuildPhase'?{settings:{ATTRIBUTES:['RemoveHeadersOnCopy']}}:{})})),runOnlyForDeploymentPostprocessing:0,...extra});
+const as=phase('as','PBXSourcesBuildPhase',[appsrc]),es=phase('es','PBXSourcesBuildPhase',[extsrc]);
+const ar=phase('ar','PBXResourcesBuildPhase',[assets,apriv]),er=phase('er','PBXResourcesBuildPhase',[...files,epriv]);
+const af=phase('af','PBXFrameworksBuildPhase',[]),ef=phase('ef','PBXFrameworksBuildPhase',[]);
+const embed=phase('embed','PBXCopyFilesBuildPhase',[extprod],{dstPath:'',dstSubfolderSpec:13,name:'Embed app extensions'});
+const proxy=add('proxy',{isa:'PBXContainerItemProxy',containerPortal:id('project'),proxyType:1,remoteGlobalIDString:id('exttarget'),remoteInfo:'Calendar Rail Extension'});
+const dep=add('dep',{isa:'PBXTargetDependency',target:id('exttarget'),targetProxy:proxy});
+function configs(prefix,settings){const ids=['Debug','Release'].map(name=>add(prefix+name,{isa:'XCBuildConfiguration',name,buildSettings:{...settings,...(name==='Debug'?{SWIFT_OPTIMIZATION_LEVEL:'-Onone'}:{SWIFT_COMPILATION_MODE:'wholemodule'})}}));return add(prefix+'configs',{isa:'XCConfigurationList',buildConfigurations:ids,defaultConfigurationIsVisible:0,defaultConfigurationName:'Release'})}
+const base={SDKROOT:'macosx',MACOSX_DEPLOYMENT_TARGET:'13.0',SWIFT_VERSION:'5.0',CLANG_ENABLE_MODULES:'YES',CLANG_ENABLE_OBJC_ARC:'YES',CODE_SIGN_STYLE:'Automatic',ENABLE_HARDENED_RUNTIME:'YES',CURRENT_PROJECT_VERSION:'2',MARKETING_VERSION:'1.0.1'};
+const pc=configs('project',base);
+const ac=configs('app',{INFOPLIST_FILE:'App/Info.plist',PRODUCT_BUNDLE_IDENTIFIER:'com.tylormayfield.calendarrail',PRODUCT_NAME:'Calendar Rail',CODE_SIGN_ENTITLEMENTS:'App/CalendarRail.entitlements',ASSETCATALOG_COMPILER_APPICON_NAME:'AppIcon',LD_RUNPATH_SEARCH_PATHS:['$(inherited)','@executable_path/../Frameworks'],GENERATE_INFOPLIST_FILE:'NO'});
+const ec=configs('ext',{INFOPLIST_FILE:'Extension/Info.plist',PRODUCT_BUNDLE_IDENTIFIER:'com.tylormayfield.calendarrail.Extension',PRODUCT_NAME:'Calendar Rail Extension',PRODUCT_MODULE_NAME:'Calendar_Rail_Extension',CODE_SIGN_ENTITLEMENTS:'Extension/CalendarRail.entitlements',SKIP_INSTALL:'YES',APPLICATION_EXTENSION_API_ONLY:'YES',GENERATE_INFOPLIST_FILE:'NO',LD_RUNPATH_SEARCH_PATHS:['$(inherited)','@executable_path/../Frameworks','@executable_path/../../../../Frameworks']});
+add('apptarget',{isa:'PBXNativeTarget',buildConfigurationList:ac,buildPhases:[as,af,ar,embed],buildRules:[],dependencies:[dep],name:'Calendar Rail',productName:'Calendar Rail',productReference:appprod,productType:'com.apple.product-type.application'});
+add('exttarget',{isa:'PBXNativeTarget',buildConfigurationList:ec,buildPhases:[es,ef,er],buildRules:[],dependencies:[],name:'Calendar Rail Extension',productName:'Calendar Rail Extension',productReference:extprod,productType:'com.apple.product-type.app-extension'});
+add('project',{isa:'PBXProject',attributes:{LastUpgradeCheck:'2700',BuildIndependentTargetsInParallel:'YES'},buildConfigurationList:pc,compatibilityVersion:'Xcode 14.0',developmentRegion:'en',hasScannedForEncodings:0,knownRegions:['en','Base'],mainGroup:group,productRefGroup:id('products'),projectDirPath:'',projectRoot:'',targets:[id('apptarget'),id('exttarget')]});
+const encode=x=>Array.isArray(x)?'('+x.map(encode).join(',')+')':typeof x==='object'?'{'+Object.entries(x).map(([k,v])=>q(k)+' = '+encode(v)+';').join('\n')+'}':typeof x==='number'?''+x:q(x);
+fs.mkdirSync(path.join(root,'Calendar Rail.xcodeproj'),{recursive:true});
+fs.writeFileSync(path.join(root,'Calendar Rail.xcodeproj/project.pbxproj'),'// !$*UTF8*$!\n'+encode({archiveVersion:1,classes:{},objectVersion:56,objects,rootObject:id('project')})+'\n');
+const scheme=`<?xml version="1.0" encoding="UTF-8"?><Scheme LastUpgradeVersion="2700" version="1.3"><BuildAction parallelizeBuildables="YES" buildImplicitDependencies="YES"><BuildActionEntries><BuildActionEntry buildForTesting="YES" buildForRunning="YES" buildForProfiling="YES" buildForArchiving="YES" buildForAnalyzing="YES"><BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="${id('apptarget')}" BuildableName="Calendar Rail.app" BlueprintName="Calendar Rail" ReferencedContainer="container:Calendar Rail.xcodeproj"/></BuildActionEntry></BuildActionEntries></BuildAction><LaunchAction buildConfiguration="Debug" selectedDebuggerIdentifier="Xcode.DebuggerFoundation.Debugger.LLDB" selectedLauncherIdentifier="Xcode.IDEFoundation.Launcher.LLDB" launchStyle="0" useCustomWorkingDirectory="NO" ignoresPersistentStateOnLaunch="NO" debugDocumentVersioning="YES" debugServiceExtension="internal" allowLocationSimulation="YES"><BuildableProductRunnable runnableDebuggingMode="0"><BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="${id('apptarget')}" BuildableName="Calendar Rail.app" BlueprintName="Calendar Rail" ReferencedContainer="container:Calendar Rail.xcodeproj"/></BuildableProductRunnable></LaunchAction><ProfileAction buildConfiguration="Release" shouldUseLaunchSchemeArgsEnv="YES" savedToolIdentifier="" useCustomWorkingDirectory="NO" debugDocumentVersioning="YES"/><AnalyzeAction buildConfiguration="Debug"/><ArchiveAction buildConfiguration="Release" revealArchiveInOrganizer="YES"/></Scheme>`;
+fs.mkdirSync(path.join(root,'Calendar Rail.xcodeproj/xcshareddata/xcschemes'),{recursive:true});fs.writeFileSync(path.join(root,'Calendar Rail.xcodeproj/xcshareddata/xcschemes/Calendar Rail.xcscheme'),scheme);
+console.log('Generated Calendar Rail.xcodeproj');

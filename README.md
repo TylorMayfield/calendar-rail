@@ -2,7 +2,7 @@
 
 A free, private Calendar shortcut for Gmail's left app rail, below Mail, Chat and Meet. Opens Google Calendar in a new tab. Shared vanilla JavaScript and Manifest V3 for Chrome and macOS Safari.
 
-**Release status:** development build. Neither store listing is live. See [verification](docs/verification.md) and [submission status](docs/submission-status.md) for evidence and remaining checks.
+**Release status:** development build. Neither store listing is live. Submission is paused following a request for Calendar in Gmail’s center pane; that experimental behavior is not included. See [verification](docs/verification.md) and [submission status](docs/submission-status.md) for evidence and remaining checks.
 
 ## Privacy and permissions
 
@@ -25,7 +25,7 @@ Your browser can describe the permission as reading and changing data on mail.go
 
 Requires a Mac with Xcode and Safari. This project contains a macOS Safari web extension wrapper in `safari/`.
 
-1. Open `safari/Calendar Rail/Calendar Rail.xcodeproj` in Xcode.
+1. Open `safari/Calendar Rail.xcodeproj` in Xcode.
 2. Select your Apple developer team for the app and extension targets. Bundle prefix is `com.tylormayfield.calendarrail`.
 3. Build and run the macOS app. Enable Calendar Rail in Safari **Settings → Extensions** and allow `mail.google.com`.
 4. Refresh Gmail. See [Safari build instructions](docs/safari.md).
@@ -43,7 +43,7 @@ npm run package
 npm run test:browser
 ```
 
-`test:browser` serves a synthetic navigation fixture and behavioral regression harness at `http://127.0.0.1:4817`. It does not use a real Google account. Fixture builds relax the origin guard for localhost only; those files never enter the shipping ZIP. See [testing](docs/testing.md).
+`test:browser` builds a self-contained synthetic navigation fixture and behavioral regression harness at `build/browser-harness.html`. Open it in Chrome or Safari and select **Run checks**. It does not use a real Google account. Fixture builds relax the origin guard for the generated local file only; those files never enter the shipping ZIP. See [testing](docs/testing.md).
 
 ## Compatibility and limits
 
@@ -55,6 +55,6 @@ Refresh Gmail after installation and updates. Removing the extension stops futur
 
 ## Branding
 
-The green and ivory Calendar Rail icon is original artwork created for this project. The in-page calendar symbol is an original generic outline. Google and Gmail names identify compatibility only.
+The monochrome Calendar Rail icon is original artwork created for this project. The in-page calendar symbol is an original generic outline in the page’s current text color. Google and Gmail names identify compatibility only.
 
 This extension is an independent product and is not affiliated with, endorsed by, or sponsored by Google or any Google product.

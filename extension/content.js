@@ -7,7 +7,7 @@
   // An isolated-world singleton also handles re-injection during development.
   const key = '__calendarRailV1';
   if (globalThis[key]) { globalThis[key].refresh(); return; }
-  const icon = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="16" rx="3"/><path d="M7.5 3v4M16.5 3v4M3.5 10h17M8 14h2M14 14h2M8 17.5h2"/></svg>';
+  const icon = '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="16" rx="3"/><path d="M7.5 3v4M16.5 3v4M3.5 10h17M8 14h1M15 14h1M11.5 17.5h1"/></svg>';
   let host, link, timer, resize, railObserver, observedParent;
   let suspended = false;
   const owned = n => n?.nodeType === 1 && n.getAttribute('data-calendar-rail') === OWNER;

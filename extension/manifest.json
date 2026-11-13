@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Calendar Rail \u2014 shortcut for Gmail",
   "short_name": "Calendar Rail",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Add a private Calendar shortcut to Gmail\u2019s left navigation. Free, with no ads or tracking.",
   "icons": {
     "16": "icons/icon-16.png",

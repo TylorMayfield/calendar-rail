@@ -1,0 +1,28 @@
+(() => {
+ const f=Fixture,results=document.querySelector('#results'),summary=document.querySelector('#summary');
+ const wait=()=>new Promise(r=>setTimeout(r,450));
+ const assert=(v,m)=>{if(!v)throw Error(m)};
+ const account=document.querySelector('header a');
+ document.querySelector('#light').onclick=()=>document.body.classList.remove('dark');
+ document.querySelector('#dark').onclick=()=>document.body.classList.add('dark');
+ document.querySelector('#collapse').onclick=()=>{const n=f.fixture.firstElementChild;n.style.width=n.style.width==='48px'?'68px':'48px'};
+ const tests=[
+ ['Fresh install places one shortcut directly below Meet',async()=>{await wait();assert(f.host()?.previousElementSibling.querySelector('[aria-label=Meet]'),'Not below Meet');assert(document.querySelectorAll('#calendar-rail-shortcut-v1').length===1,'Duplicate');}],
+ ['New-tab link has a safe opener and referrer policy',async()=>{const l=f.link();assert(l.target==='_blank'&&l.rel.includes('noopener')&&l.rel.includes('noreferrer')&&l.referrerPolicy==='no-referrer','Unsafe link');}],
+ ['Email identity selects the active account',async()=>{assert(new URL(f.link().href).searchParams.get('authuser')==='alice@example.test','Wrong identity');}],
+ ['Account identity changes update the route without numeric slots',async()=>{account.setAttribute('aria-label','Google Account: Bob (bob@work.example)');f.link().dispatchEvent(new Event('focus'));assert(new URL(f.link().href).searchParams.get('authuser')==='bob@work.example','Stale slot');assert(!new URL(f.link().href).pathname.includes('/u/'),'Numeric slot copied');}],
+ ['Ambiguous account labels open the account chooser',async()=>{account.setAttribute('aria-label','Google Account: A (a@example.test) B (b@example.test)');f.link().dispatchEvent(new Event('focus'));assert(new URL(f.link().href).pathname==='/AccountChooser','Guessed account');}],
+ ['Missing account identity opens the chooser',async()=>{account.removeAttribute('aria-label');f.link().dispatchEvent(new Event('focus'));assert(new URL(f.link().href).pathname==='/AccountChooser','Defaulted account');account.setAttribute('aria-label','Google Account: Sample (alice@example.test)');}],
+ ['Narrow rail keeps an accessible icon and hides only the label',async()=>{f.fixture.firstElementChild.style.width='48px';await wait();assert(f.host().hasAttribute('data-collapsed'),'Not collapsed');assert(getComputedStyle(f.link().querySelector('span')).display==='none','Label overflow');assert(f.link().getAttribute('aria-label').includes('Calendar'),'No accessible label');f.fixture.firstElementChild.style.width='68px';await wait();}],
+ ['Dark page theme determines icon color',async()=>{document.body.classList.add('dark');window.dispatchEvent(new Event('resize'));await wait();assert(getComputedStyle(f.host()).color===getComputedStyle(f.fixture.querySelector('[aria-label=Meet]')).color,'Wrong theme');document.body.classList.remove('dark');window.dispatchEvent(new Event('resize'));await wait();}],
+ ['Gmail navigation replacement recovers without duplicates',async()=>{f.rail();await wait();assert(f.host(),'Not recovered');assert(document.querySelectorAll('#calendar-rail-shortcut-v1').length===1,'Duplicate after rerender');}],
+ ['Repeated script injection leaves only one shortcut',async()=>{await new Promise((resolve,reject)=>{const s=document.createElement('script');s.textContent=document.querySelector('#adapter-copy').textContent;document.head.append(s);resolve()});await wait();assert(document.querySelectorAll('#calendar-rail-shortcut-v1').length===1,'Duplicate after injection');}],
+ ['Unknown layout removes the shortcut without changing the page',async()=>{f.fixture.innerHTML='<div id="unknown">Unrecognized layout</div>';await wait();assert(!f.host(),'Unsafe insertion');assert(document.getElementById('unknown').textContent==='Unrecognized layout','Page damaged');}],
+ ['Implausibly wide navigation fails safely',async()=>{f.rail();f.fixture.firstElementChild.style.width='500px';await wait();assert(!f.host(),'Inserted in wrong region');}],
+ ['Mail-only layout supports Compose placement and collapse',async()=>{f.mail();await wait();assert(f.host()?.dataset.mode==='mail','Mail fallback missing');f.fixture.firstElementChild.style.setProperty('width','68px','important');await wait();assert(f.host().hasAttribute('data-collapsed'),'Mail collapse missing');}],
+ ['Page cache restore reinstalls exactly once',async()=>{window.dispatchEvent(new PageTransitionEvent('pagehide'));assert(!f.host(),'Not cleaned');window.dispatchEvent(new PageTransitionEvent('pageshow'));await wait();assert(f.host(),'Not restored');f.rail();await wait();}],
+ ['No guarded message content, network or storage APIs used',async()=>{assert(!f.state.network.length,JSON.stringify(f.state.network));assert(!f.state.storage.length,JSON.stringify(f.state.storage));assert(!f.state.content.length,JSON.stringify(f.state.content));assert(!f.state.errors.length,JSON.stringify(f.state.errors));}],
+ ['Adapter stays idle when the page stops changing',async()=>{await wait();const n=f.state.queries.length;await new Promise(r=>setTimeout(r,1000));assert(f.state.queries.length-n<8,'Observer loop');}]
+ ];
+ document.querySelector('#run').onclick=async()=>{results.replaceChildren();summary.textContent='Running…';let pass=0;for(const [name,fn]of tests){const li=document.createElement('li');try{await fn();li.textContent='PASS '+name;li.className='pass';pass++}catch(e){li.textContent='FAIL '+name+': '+e.message;li.className='fail'}results.append(li)}summary.textContent=`${pass}/${tests.length} passed. Synthetic fixture only; real Gmail acceptance is separate.`;document.title=`Calendar Rail: ${pass}/${tests.length} passed`;};
+})();
