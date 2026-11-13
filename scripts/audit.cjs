@@ -1,0 +1,14 @@
+const fs=require('node:fs'); const path=require('node:path'); const assert=require('node:assert/strict');
+const root=path.resolve(__dirname,'..'); const ext=path.join(root,'extension');
+const m=JSON.parse(fs.readFileSync(path.join(ext,'manifest.json')));
+assert.equal(m.manifest_version,3);
+for(const k of ['permissions','host_permissions','optional_permissions','background','web_accessible_resources','externally_connectable','oauth2']) assert.equal(m[k],undefined,`unexpected ${k}`);
+assert.deepEqual(m.content_scripts[0].matches,['https://mail.google.com/mail/*']);
+assert.equal(m.content_scripts[0].all_frames,false);
+const source=m.content_scripts[0].js.map(f=>fs.readFileSync(path.join(ext,f),'utf8')).join('\n');
+for(const re of [/\bfetch\s*\(/,/XMLHttpRequest/,/sendBeacon/,/WebSocket/,/EventSource/,/\blocalStorage\b/,/\bsessionStorage\b/,/\bindexedDB\b/,/\bdocument\.cookie\b/,/\bchrome\./,/\bbrowser\./,/\beval\s*\(/,/new Function/,/document\.(title|documentElement\.innerHTML|body\.(innerHTML|innerText|textContent))/,/\.cloneNode\(/]) assert.ok(!re.test(source),`forbidden behavior: ${re}`);
+for(const f of m.content_scripts[0].js) new (require('node:vm').Script)(fs.readFileSync(path.join(ext,f),'utf8'),{filename:f});
+for(const f of Object.values(m.icons)) assert.ok(fs.existsSync(path.join(ext,f)));
+const disclaimer='This extension is an independent product and is not affiliated with, endorsed by, or sponsored by Google or any Google product.';
+assert.ok(fs.readFileSync(path.join(ext,'about.html'),'utf8').includes(disclaimer));
+console.log('PASS: Gmail-only manifest, no API permissions, no network/storage/content read sinks, parseable source, bundled icons, disclaimer. Static audit is not real-account acceptance.');

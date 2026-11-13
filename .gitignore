@@ -1,0 +1,10 @@
+node_modules/
+build/
+dist/
+.DS_Store
+*.xcuserstate
+xcuserdata/
+*.xcarchive
+*.p12
+*.mobileprovision
+.env*

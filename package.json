@@ -1,0 +1,15 @@
+{
+  "name": "calendar-rail",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A private, free Calendar shortcut for Gmail navigation.",
+  "scripts": {
+    "test": "node --test tests/*.test.cjs",
+    "package": "node scripts/package.cjs",
+    "check": "node scripts/audit.cjs",
+    "test:browser": "node scripts/serve-tests.cjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
