@@ -25,3 +25,9 @@ Version 1.1.0 is the center-workspace development implementation. Version 1.0.1 
 - Publisher reauthentication for Chrome; Apple signing/provisioning, updated metadata/privacy/free price and build upload. Verify receipts after actual submission.
 
 This is Gmail’s Calendar companion expanded to the center, not the full standalone Calendar website. Week/month parity is not implemented. Unknown layouts must fail closed without leaving the main view inert or adding duplicate controls.
+
+## Sizing fix — 1.1.1
+
+Reproduced the defect in actual Gmail: scrolling the inbox moved its role=main rectangle to y=-1481. Previous code used that scrolled top as the fixed panel top. The corrected layout anchors to the visible Gmail banner, stable outer Mail workspace and current side-rail edge. Explicit bounded width/height replace frozen initial right/bottom offsets. Unknown header geometry clears owned styles and restores main focusability. No frame content reads or permissions were added.
+
+Live Chrome checks: at 100%, Calendar remained x324–1456/y64–715 despite Mail main y=-1481. At 125% it remained below y64 with width829.6/height504.8. At 150% (1008 CSS px viewport), width628/height407.3; collapsed navigation expanded it to width868 at x84 while keeping y64. Native Close restored Mail focusability. Zoom reset to 100%. Tests include the scrolled-content regression and dynamic geometry changes; the active Node suite has 10 passing tests. Browser fixture execution remains blocked/unverified, and signed Safari acceptance is still outstanding.

@@ -2,7 +2,9 @@
 
 A free Calendar button below Mail, Chat and Meet in Gmail. Opens Gmail’s own Calendar companion across the center workspace, keeping the same Gmail tab and Google session. Original monochrome icon; shared vanilla JavaScript and Manifest V3 for Chrome and macOS Safari.
 
-**Development version 1.1.0:** the workspace behavior has been visually verified in real Chrome. Installed Safari, two signed-in accounts, store updates and submissions remain unverified. Neither store listing is live. See [verification](docs/verification.md) and [submission status](docs/submission-status.md).
+**Development version 1.1.1:** the workspace behavior has been visually verified in real Chrome. Installed Safari, two signed-in accounts, store updates and submissions remain unverified. Neither store listing is live. See [verification](docs/verification.md) and [submission status](docs/submission-status.md).
+
+Version 1.1.1 fixes sizing from scrolled Mail: Calendar stays below the header, measures current workspace edges and follows zoom/menu changes. Verified in live Chrome at 100%, 125% and 150%.
 
 ## Privacy and permissions
 
